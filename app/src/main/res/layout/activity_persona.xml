@@ -373,7 +373,7 @@
 
             <!-- 4. StonicX Mode -->
             <LinearLayout
-                android:id="@+id/cardPersonaStonicX"
+                android:id="@+id/cardPersonaStonicX2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -448,7 +448,7 @@
                 </LinearLayout>
 
                 <RadioButton
-                    android:id="@+id/rbSelectStonicX"
+                    android:id="@+id/rbSelectStonicX2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
