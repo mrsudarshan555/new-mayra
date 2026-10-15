@@ -88,7 +88,7 @@ object FinanceTools {
         val arr = JSONObject(r.body).optJSONObject("finance")?.optJSONArray("result")?.optJSONObject(0)?.optJSONArray("quotes")
         val syms = (0 until (arr?.length() ?: 0)).mapNotNull { arr?.optJSONObject(it)?.optString("symbol") }.take(8)
         if (syms.isEmpty()) return@tool ToolResult.ok("Abhi trending list khaali hai.")
-        ToolResult.ok(syms.joinToString("\n") { sym -> Market.quote(sym).first?.let { Market.line(it) } ?: sym })
+        ToolResult.ok(syms.map { sym -> Market.quote(sym).first?.let { Market.line(it) } ?: sym }.joinToString("\n"))
     }
 
     private val getMarketSnapshot = tool("get_market_snapshot", "Quick look at the markets: Nifty, Sensex, Bank Nifty, S&P 500, Nasdaq, Dow, USD/INR, gold and crude oil.") { _, _ ->
@@ -156,7 +156,7 @@ object FinanceTools {
 
     private val getWatchlist = tool("get_watchlist", "Show the watchlist with live prices.") { ctx, _ ->
         val l = FinanceStore.watchlist(ctx.context)
-        if (l.isEmpty()) ToolResult.ok("Watchlist khaali hai.") else ToolResult.ok(l.joinToString("\n") { sym -> Market.quote(sym).first?.let { Market.line(it) } ?: "$sym: data nahi mila" })
+        if (l.isEmpty()) ToolResult.ok("Watchlist khaali hai.") else ToolResult.ok(l.map { sym -> Market.quote(sym).first?.let { Market.line(it) } ?: "$sym: data nahi mila" }.joinToString("\n"))
     }
 
     private val addHolding = tool("add_holding", "Record shares the user owns (replaces the entry for that stock).",
