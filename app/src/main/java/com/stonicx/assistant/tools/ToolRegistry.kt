@@ -2,6 +2,11 @@ package com.stonicx.assistant.tools
 
 import android.util.Log
 import com.stonicx.assistant.tools.coding.CodingTools
+import com.stonicx.assistant.coding.ProjectTools
+import com.stonicx.assistant.tools.creator.CreatorTools
+import com.stonicx.assistant.tools.finance.FinanceTools
+import com.stonicx.assistant.tools.phone.PhoneTools
+import com.stonicx.assistant.tools.web.WebTools
 import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 
@@ -18,6 +23,11 @@ object ToolRegistry {
         register(findTool.pin())
         register(runTool.pin())
         CodingTools.all().forEach { register(it) }
+        PhoneTools.all().forEach { register(it) }
+        FinanceTools.all().forEach { register(it) }
+        CreatorTools.all().forEach { register(it) }
+        ProjectTools.all().forEach { register(it) }
+        WebTools.all().forEach { register(it) }
     }
 
     @Synchronized
@@ -38,6 +48,8 @@ object ToolRegistry {
         name == "run_tool" -> 960_000L
         name.startsWith("termux_") && name !in setOf("termux_status", "termux_read_more", "termux_find_in_output", "termux_read_file", "termux_list_recipes") -> 960_000L
         name == "github_clone_repo" || name == "github_pull" -> 240_000L
+        name == "deep_research" -> 300_000L
+        name == "generate_image" || name == "edit_photo" || name == "send_report" || name == "write_video_script" || name == "analyze_stock" || name == "review_portfolio" -> 150_000L
         name == "github_agent_edit" || name == "github_push_changes" || name == "github_share_repo" -> 120_000L
         else -> 60_000L
     }

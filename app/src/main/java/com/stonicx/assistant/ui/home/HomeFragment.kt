@@ -140,6 +140,17 @@ class HomeFragment : Fragment() {
             }
 
             webViewClient = object : WebViewClient() {
+                override fun onRenderProcessGone(view: WebView?, detail: android.webkit.RenderProcessGoneDetail?): Boolean {
+                    // Without this, a crashed WebView renderer (common with WebGL on older Android) kills the whole app.
+                    view?.context?.let {
+                        com.stonicx.assistant.util.CrashReporter.recordHandled(
+                            it, RuntimeException("home orb WebView render process gone (didCrash=${detail?.didCrash()})"), "home orb webview"
+                        )
+                    }
+                    view?.visibility = android.view.View.GONE
+                    return true
+                }
+
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
                     isPageLoaded = true
@@ -200,6 +211,7 @@ class HomeFragment : Fragment() {
                 val mapped = when (themeKey) {
                     "dark" -> "dark"
                     "red" -> "red"
+                    "aurora" -> "aurora"
                     "sunset" -> "sunset"
                     else -> "light"
                 }

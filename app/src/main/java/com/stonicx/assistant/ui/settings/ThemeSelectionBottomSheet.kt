@@ -41,6 +41,7 @@ class ThemeSelectionBottomSheet : BottomSheetDialogFragment() {
         binding.cardThemeLight.setOnClickListener { selectTheme("light", "Light") }
         binding.cardThemeDark.setOnClickListener { selectTheme("dark", "Dark") }
         binding.cardThemeRed.setOnClickListener { selectTheme("red", "Red") }
+        binding.cardThemeAurora.setOnClickListener { selectTheme("aurora", "Aurora") }
         binding.cardThemeSunset.setOnClickListener { selectTheme("sunset", "Sunset") }
 
         binding.btnApplyCustom.setOnClickListener {
@@ -103,6 +104,7 @@ class ThemeSelectionBottomSheet : BottomSheetDialogFragment() {
         binding.ivCheckLight.visibility = if (activeTheme == "light") View.VISIBLE else View.GONE
         binding.ivCheckDark.visibility = if (activeTheme == "dark") View.VISIBLE else View.GONE
         binding.ivCheckRed.visibility = if (activeTheme == "red") View.VISIBLE else View.GONE
+        binding.ivCheckAurora.visibility = if (activeTheme == "aurora") View.VISIBLE else View.GONE
         binding.ivCheckSunset.visibility = if (activeTheme == "sunset") View.VISIBLE else View.GONE
         binding.ivCheckCustom.visibility = if (activeTheme == "custom") View.VISIBLE else View.GONE
     }

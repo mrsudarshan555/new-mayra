@@ -23,8 +23,8 @@ try {
     $env:STONICX_RELEASE_STORE_PASSWORD = $plainPassword
     $env:STONICX_RELEASE_KEY_ALIAS = $keyAlias
     $env:STONICX_RELEASE_KEY_PASSWORD = $plainPassword
-    $env:STONICX_DEVELOPER_NAME = "StonicX"
-    $env:STONICX_COPYRIGHT_OWNER = "StonicX"
+    $env:STONICX_DEVELOPER_NAME = "Zafer"
+    $env:STONICX_COPYRIGHT_OWNER = "Sudarshan"
 
     $keytool = if ($env:JAVA_HOME) { Join-Path $env:JAVA_HOME "bin\keytool.exe" } else { (Get-Command keytool -ErrorAction Stop).Source }
     $certificateInfo = (& $keytool -list -v -keystore $keyStore -alias $keyAlias -storepass:env STONICX_RELEASE_STORE_PASSWORD | Out-String)

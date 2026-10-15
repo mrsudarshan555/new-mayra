@@ -203,7 +203,7 @@
                     android:focusable="false" />
             </LinearLayout>
 
-            <!-- 2. Girlfriend Mode (Pari) -->
+            <!-- 2. Mayra Agent -->
             <LinearLayout
                 android:id="@+id/cardPersonaGirlfriend"
                 android:layout_width="match_parent"
@@ -245,7 +245,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Girlfriend Mode (Pari)"
+                            android:text="Mayra Agent"
                             android:textColor="?attr/themeTextPrimary"
                             android:textSize="16sp"
                             android:fontFamily="sans-serif-medium"
@@ -287,7 +287,7 @@
                     android:focusable="false" />
             </LinearLayout>
 
-            <!-- 3. Boyfriend Mode (Kabir) -->
+            <!-- 3. Kabir Agent (Kabir) -->
             <LinearLayout
                 android:id="@+id/cardPersonaBoyfriend"
                 android:layout_width="match_parent"
@@ -329,7 +329,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Boyfriend Mode (Kabir)"
+                            android:text="Kabir Agent (Kabir)"
                             android:textColor="?attr/themeTextPrimary"
                             android:textSize="16sp"
                             android:fontFamily="sans-serif-medium"
@@ -373,7 +373,7 @@
 
             <!-- 4. StonicX Mode -->
             <LinearLayout
-                android:id="@+id/cardPersonaStonicX2"
+                android:id="@+id/cardPersonaStonicXMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -448,7 +448,7 @@
                 </LinearLayout>
 
                 <RadioButton
-                    android:id="@+id/rbSelectStonicX2"
+                    android:id="@+id/rbSelectStonicXMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -623,7 +623,7 @@
             android:layout_height="54dp"
             android:background="@drawable/bg_stonicx_pill_button"
             app:backgroundTint="@null"
-            android:text="Activate Persona"
+            android:text="Activate Agent"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"

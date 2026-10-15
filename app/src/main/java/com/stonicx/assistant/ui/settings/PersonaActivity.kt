@@ -70,7 +70,7 @@ class PersonaActivity : AppCompatActivity() {
             selectPersona(GeminiConstants.PERSONALITY_BOYFRIEND, updateVoiceDefault = true)
         }
 
-        binding.cardPersonaStonicX.setOnClickListener {
+        binding.cardPersonaStonicXMode.setOnClickListener {
             selectPersona(GeminiConstants.PERSONALITY_STONICX, updateVoiceDefault = true)
         }
 
@@ -85,7 +85,7 @@ class PersonaActivity : AppCompatActivity() {
         binding.rbSelectStonicX.isChecked = (personaKey == GeminiConstants.PERSONALITY_ASSISTANT)
         binding.rbSelectGirlfriend.isChecked = (personaKey == GeminiConstants.PERSONALITY_GIRLFRIEND)
         binding.rbSelectBoyfriend.isChecked = (personaKey == GeminiConstants.PERSONALITY_BOYFRIEND)
-        binding.rbSelectStonicX.isChecked = (personaKey == GeminiConstants.PERSONALITY_STONICX)
+        binding.rbSelectStonicXMode.isChecked = (personaKey == GeminiConstants.PERSONALITY_STONICX)
 
         if (updateVoiceDefault) {
             when (personaKey) {
@@ -101,7 +101,7 @@ class PersonaActivity : AppCompatActivity() {
     private fun updatePersonaPreview() {
         if (!::binding.isInitialized) return
         val persona = when (currentSelectedPersona) {
-            GeminiConstants.PERSONALITY_GIRLFRIEND -> "Pari"
+            GeminiConstants.PERSONALITY_GIRLFRIEND -> "Mayra"
             GeminiConstants.PERSONALITY_BOYFRIEND -> "Kabir"
             GeminiConstants.PERSONALITY_STONICX -> "StonicX"
             else -> "StonicX Pro"
@@ -145,9 +145,9 @@ class PersonaActivity : AppCompatActivity() {
         preferences.personality = currentSelectedPersona
 
         val personaDisplayName = when (currentSelectedPersona) {
-            GeminiConstants.PERSONALITY_GIRLFRIEND -> "Pari (Girlfriend Mode)"
-            GeminiConstants.PERSONALITY_BOYFRIEND -> "Kabir (Boyfriend Mode)"
-            GeminiConstants.PERSONALITY_STONICX -> "StonicX Neural Core"
+            GeminiConstants.PERSONALITY_GIRLFRIEND -> "Mayra Agent"
+            GeminiConstants.PERSONALITY_BOYFRIEND -> "Kabir Agent"
+            GeminiConstants.PERSONALITY_STONICX -> "StonicX Code Agent"
             else -> "StonicX Pro"
         }
 

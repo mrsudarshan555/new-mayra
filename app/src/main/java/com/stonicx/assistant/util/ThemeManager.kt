@@ -22,6 +22,7 @@ object ThemeManager {
         return when (themeKey) {
             "dark" -> Color.parseColor("#070914")
             "red" -> Color.parseColor("#0E0307")
+            "aurora" -> Color.parseColor("#000000")
             "sunset" -> Color.parseColor("#FFF0EA")
             "custom" -> try { Color.parseColor(customHex ?: "#FFFFFF") } catch (_: Exception) { Color.WHITE }
             else -> Color.parseColor("#EEF2F9")
@@ -35,6 +36,7 @@ object ThemeManager {
         val (themeRes, isLightStatusBar, bgColor) = when (themeKey) {
             "dark" -> Triple(R.style.Theme_StonicXAssistant_Dark, false, Color.parseColor("#070914"))
             "red" -> Triple(R.style.Theme_StonicXAssistant_Red, false, Color.parseColor("#0E0307"))
+            "aurora" -> Triple(R.style.Theme_StonicXAssistant_Aurora, false, Color.parseColor("#000000"))
             "sunset" -> Triple(R.style.Theme_StonicXAssistant_Sunset, true, Color.parseColor("#FFF0EA"))
             "custom" -> {
                 val customHex = prefs?.customThemeColor ?: "#FFFFFF"

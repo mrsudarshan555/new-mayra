@@ -250,6 +250,47 @@
         <item name="themeAccentLight">#1E2858</item>
     </style>
 
+    <!-- 7. AURORA THEME - pure black + violet/magenta orb glow (new dark look) -->
+    <style name="Theme.StonicXAssistant.Aurora" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">#000000</item>
+        <item name="colorPrimary">#B44CFF</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSurface">#33FFFFFF</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+
+        <item name="themeWordmark">@drawable/ic_mayra_wordmark_light</item>
+
+        <item name="themeBg">#000000</item>
+        <item name="themeSurface">#1AFFFFFF</item>
+        <item name="themeCardBg">#1AFFFFFF</item>
+        <item name="themeCardBorder">#33FFFFFF</item>
+        <item name="themeCardGlassStart">#2EFFFFFF</item>
+        <item name="themeCardGlassEnd">#0DFFFFFF</item>
+        <item name="themeDockBg">#66141418</item>
+        <item name="themeDockGlassStart">#802A2A32</item>
+        <item name="themeDockGlassEnd">#4D0E0E12</item>
+        <item name="themeDockBorder">#40FFFFFF</item>
+        <item name="themeGlassSpecular">#C9A0FF</item>
+        <item name="themeChipBg">#26FFFFFF</item>
+        <item name="themeInputBg">#1AFFFFFF</item>
+        <item name="themeGlowBlob1">@drawable/bg_liquid_glow_aurora_1</item>
+        <item name="themeGlowBlob2">@drawable/bg_liquid_glow_aurora_2</item>
+        <item name="themeGlowBlob3">@drawable/bg_liquid_glow_aurora_3</item>
+
+        <item name="themeTextPrimary">#FFFFFF</item>
+        <item name="themeTextSecondary">#B8B8C4</item>
+        <item name="themeTextMuted">#8A8A98</item>
+        <item name="themeAccent1">#B44CFF</item>
+        <item name="themeAccent2">#FF3D8B</item>
+        <item name="themeAccent3">#4C7BFF</item>
+        <item name="themeAccent">#B44CFF</item>
+        <item name="themeAccentLight">#2A1745</item>
+    </style>
+
     <!-- Legacy style aliases -->
     <style name="Theme.StonicXAssistant.PearlWhite" parent="Theme.StonicXAssistant.Light" />
     <style name="Theme.StonicXAssistant.MidnightOnyx" parent="Theme.StonicXAssistant.Dark" />

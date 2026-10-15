@@ -60,9 +60,12 @@ class StonicXApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        com.stonicx.assistant.util.CrashReporter.install(this)
         SecurityManager.verify(this)
         instance = this
         preferences = AppPreferences(this)
+        try { com.stonicx.assistant.tools.phone.ReminderStore.rearm(this) } catch (_: Exception) { }
+        try { com.stonicx.assistant.tools.finance.FinanceStore.schedule(this) } catch (_: Exception) { }
         chatRepository = ChatRepository(preferences)
 
         // Memory System

@@ -180,6 +180,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        com.stonicx.assistant.util.CrashReporter.showPendingReport(this)
+
         com.stonicx.assistant.util.ThemeManager.applyDynamicBackground(binding.rootMainLayout)
 
         currentTab = savedInstanceState?.getInt("CURRENT_TAB", TAB_HOME) ?: TAB_HOME

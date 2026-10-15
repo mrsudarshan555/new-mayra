@@ -130,8 +130,11 @@ class AudioRecorder(
                                     break
                                 }
                             }
-                        } catch (e: Exception) {
-                            Log.e(TAG, "Exception during AudioRecord read loop: ${e.message}", e)
+                        } catch (e: kotlinx.coroutines.CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            Log.e(TAG, "Error during AudioRecord read loop: ${e.message}", e)
+                            com.stonicx.assistant.util.CrashReporter.recordHandled(com.stonicx.assistant.StonicXApp.instance, e, "audio read loop")
                             delay(50)
                         }
                     }

@@ -88,6 +88,17 @@ class OrbHelper(
         }, "StonicXBridge")
 
         webView.webViewClient = object : WebViewClient() {
+            override fun onRenderProcessGone(view: WebView?, detail: android.webkit.RenderProcessGoneDetail?): Boolean {
+                // Without this, a crashed WebView renderer (common with WebGL on older Android) kills the whole app.
+                view?.context?.let {
+                    com.stonicx.assistant.util.CrashReporter.recordHandled(
+                        it, RuntimeException("hud WebView render process gone (didCrash=${detail?.didCrash()})"), "hud webview"
+                    )
+                }
+                view?.visibility = android.view.View.GONE
+                return true
+            }
+
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 isLoaded = true

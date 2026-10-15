@@ -14,8 +14,8 @@ val releaseStorePassword = configuredValue("STONICX_RELEASE_STORE_PASSWORD")
 val releaseKeyAlias = configuredValue("STONICX_RELEASE_KEY_ALIAS")
 val releaseKeyPassword = configuredValue("STONICX_RELEASE_KEY_PASSWORD")
 val releaseCertSha256 = configuredValue("STONICX_RELEASE_CERT_SHA256")?.replace(":", "")?.uppercase().orEmpty()
-val developerName = configuredValue("STONICX_DEVELOPER_NAME")?.ifBlank { null } ?: "StonicX"
-val copyrightOwner = configuredValue("STONICX_COPYRIGHT_OWNER")?.ifBlank { null } ?: "StonicX"
+val developerName = configuredValue("STONICX_DEVELOPER_NAME")?.ifBlank { null } ?: "Zafer"
+val copyrightOwner = configuredValue("STONICX_COPYRIGHT_OWNER")?.ifBlank { null } ?: "Sudarshan"
 val verificationEndpoint = configuredValue("STONICX_VERIFICATION_ENDPOINT").orEmpty()
 val releaseSigningReady = listOf(releaseStorePath, releaseStorePassword, releaseKeyAlias, releaseKeyPassword).all { !it.isNullOrBlank() }
 

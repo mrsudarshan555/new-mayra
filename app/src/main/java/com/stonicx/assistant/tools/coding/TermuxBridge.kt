@@ -63,7 +63,10 @@ object TermuxBridge {
                 if (background) putExtra("com.termux.RUN_COMMAND_PENDING_INTENT", pi)
             }
             try {
-                if (Build.VERSION.SDK_INT >= 26) ctx.startForegroundService(intent) else ctx.startService(intent)
+                // Use startService: Termux handles its own foreground state internally.
+                // startForegroundService() on another app's service is restricted on Android 14+ (API 34)
+                // and unnecessary since Termux's RunCommandService promotes itself.
+                ctx.startService(intent)
             } catch (e: SecurityException) {
                 return Result("", "", null, -1, "Termux ne permission nahi di. $SETUP_HELP")
             } catch (e: Exception) {

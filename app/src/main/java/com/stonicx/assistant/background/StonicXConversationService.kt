@@ -237,7 +237,13 @@ class StonicXConversationService : Service() {
         }
     }
 
-    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val serviceScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.Default +
+        kotlinx.coroutines.CoroutineExceptionHandler { _, t ->
+            // A failure in one background task must not take the whole app down.
+            com.stonicx.assistant.util.CrashReporter.recordHandled(applicationContext, t, "service coroutine")
+        }
+    )
     private var taskProgressOverlay: com.stonicx.assistant.ui.agent.TaskProgressOverlay? = null
     private var taskProgressOverlayJob: Job? = null
     private var overlayPermissionWarningTaskId: String? = null
@@ -500,6 +506,7 @@ class StonicXConversationService : Service() {
     override fun onCreate() {
         super.onCreate()
         activeInstance = this
+        com.stonicx.assistant.util.CrashReporter.markSessionStart(this)
         createChannel()
         initTts()
         headsetAudioRouter = com.stonicx.assistant.audio.HeadsetAudioRouter(applicationContext)
@@ -543,6 +550,10 @@ class StonicXConversationService : Service() {
                     _events.emit("Task progress is shown inside StonicX Home. Allow Display over other apps if you want the floating task panel over Instagram, Spotify, and Chrome.")
                 }
             }
+        }
+        serviceScope.launch(Dispatchers.Main.immediate) {
+            combine(_isSessionOn, _isStandby) { sessionOn, standbyOn -> sessionOn && !standbyOn }
+                .collect { active -> taskProgressOverlay?.setEdgeGlowActive(active) }
         }
         serviceScope.launch(Dispatchers.Main.immediate) {
             var previousAvailability: List<Any>? = null
@@ -3333,10 +3344,11 @@ class StonicXConversationService : Service() {
     }
 
     override fun onDestroy() {
+        com.stonicx.assistant.util.CrashReporter.markSessionEnd(this)
         taskProgressOverlay?.remove()
         taskProgressOverlayJob?.cancel()
         taskProgressOverlayJob = null
-        taskProgressOverlay?.remove()
+        taskProgressOverlay?.release()
         taskProgressOverlay = null
         stopActiveConversation()
         exitStandbyListening()

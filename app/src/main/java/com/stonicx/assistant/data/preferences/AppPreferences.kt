@@ -45,6 +45,7 @@ class AppPreferences(context: Context) {
         private const val KEY_GITHUB_TOKEN = "key_github_token"
         private const val KEY_GITHUB_USER = "key_github_user"
         private const val KEY_SUB_AGENT_MODEL = "key_sub_agent_model"
+        private const val KEY_CODING_TYPING = "key_coding_realistic_typing"
         private const val KEY_MODEL = "key_model"
         private const val KEY_VOICE = "key_voice"
         private const val KEY_PERSONALITY = "key_personality"
@@ -202,6 +203,11 @@ class AppPreferences(context: Context) {
         get() = prefs.getString(KEY_SUB_AGENT_MODEL, null)?.takeIf { it.isNotBlank() } ?: "gemini-2.5-flash"
         set(value) = prefs.edit().putString(KEY_SUB_AGENT_MODEL, value.trim()).apply()
 
+    /** Show the agent's code being typed live in the floating coding window. */
+    var codingRealisticTyping: Boolean
+        get() = prefs.getBoolean(KEY_CODING_TYPING, true)
+        set(value) = prefs.edit().putBoolean(KEY_CODING_TYPING, value).apply()
+
     val canStoreApiKeySecurely: Boolean get() = secureApiPrefs != null
 
     private fun migrateApiKeyToEncryptedStorage() {
@@ -270,6 +276,7 @@ class AppPreferences(context: Context) {
                 "light", "pearl_white" -> "light"
                 "dark", "midnight_onyx", "cyberpunk_neon", "emerald_obsidian" -> "dark"
                 "red" -> "red"
+                "aurora" -> "aurora"
                 "sunset", "rose_gold" -> "sunset"
                 "custom" -> "custom"
                 else -> "light"

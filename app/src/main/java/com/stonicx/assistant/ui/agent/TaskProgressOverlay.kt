@@ -26,6 +26,7 @@ import android.os.SystemClock
 import com.stonicx.assistant.R
 import com.stonicx.assistant.ui.home.MainActivity
 import com.stonicx.assistant.ui.orb.RimGlowView
+import com.stonicx.assistant.ui.orb.ScreenEdgeGlowView
 import com.stonicx.assistant.StonicXApp
 import com.stonicx.assistant.background.StonicXConversationService
 import android.view.ViewGroup
@@ -92,6 +93,17 @@ class TaskProgressOverlay(private val context: Context) {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                 assetLoader.shouldInterceptRequest(request.url)
 
+            override fun onRenderProcessGone(view: WebView?, detail: android.webkit.RenderProcessGoneDetail?): Boolean {
+                // Without this, a crashed WebView renderer (common with WebGL on older Android) kills the whole app.
+                view?.context?.let {
+                    com.stonicx.assistant.util.CrashReporter.recordHandled(
+                        it, RuntimeException("overlay orb WebView render process gone (didCrash=${detail?.didCrash()})"), "overlay orb webview"
+                    )
+                }
+                view?.visibility = android.view.View.GONE
+                return true
+            }
+
             override fun onPageFinished(view: WebView, url: String) {
                 pageReady = true
                 applyOrbColor()
@@ -119,7 +131,7 @@ class TaskProgressOverlay(private val context: Context) {
         addView(View(context), LinearLayout.LayoutParams(0, 1, 1f))
         addView(micButton, barBtnParams())
         addView(barButton(R.drawable.ic_overlay_keyboard, "Type a message") { launchApp("chat") }, barBtnParams())
-        addView(barButton(R.drawable.ic_overlay_close, "Close") { closeBar() }, barBtnParams())
+        addView(barButton(R.drawable.ic_overlay_close, "Close") { closeAndGoToBackground() }, barBtnParams())
     }
     private val barBox = FrameLayout(context).apply {
         addView(barGlow, FrameLayout.LayoutParams(-1, -1))
@@ -165,6 +177,59 @@ class TaskProgressOverlay(private val context: Context) {
     }
     private var attached = false
     private var avatarMode = true
+
+    // Soft colour along the phone's screen edges while Mayra is active.
+    private val edgeGlow = ScreenEdgeGlowView(context).apply { alpha = 0f }
+    private val edgeParams = WindowManager.LayoutParams(
+        WindowManager.LayoutParams.MATCH_PARENT,
+        WindowManager.LayoutParams.MATCH_PARENT,
+        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+        PixelFormat.TRANSLUCENT
+    ).apply { gravity = Gravity.TOP or Gravity.LEFT }
+    private var edgeAttached = false
+    private var edgeWanted = false
+
+    /** Called by the service: true while a live conversation is running (not in standby). */
+    fun setEdgeGlowActive(active: Boolean) {
+        edgeWanted = active
+        if (active) {
+            if (!Settings.canDrawOverlays(context)) return
+            if (!edgeAttached) {
+                try {
+                    edgeGlow.setPalette(orbPalette(StonicXApp.instance.preferences.floatingOrbColor))
+                    windowManager.addView(edgeGlow, edgeParams)
+                    edgeAttached = true
+                } catch (_: Exception) {
+                    edgeAttached = false
+                    return
+                }
+            }
+            edgeGlow.animate().cancel()
+            edgeGlow.animate().alpha(1f).setDuration(450L).start()
+        } else if (edgeAttached) {
+            edgeGlow.animate().cancel()
+            edgeGlow.animate().alpha(0f).setDuration(400L).withEndAction {
+                if (!edgeWanted) removeEdgeGlow()
+            }.start()
+        }
+    }
+
+    /** Full teardown (service stopped): also removes the screen-edge glow. */
+    fun release() {
+        edgeWanted = false
+        removeEdgeGlow()
+        remove()
+    }
+
+    private fun removeEdgeGlow() {
+        if (edgeAttached) {
+            try { windowManager.removeView(edgeGlow) } catch (_: Exception) {}
+            edgeAttached = false
+        }
+    }
     private var displayedTaskId: String? = null
     private var downRawX = 0f
     private var downRawY = 0f
@@ -385,6 +450,18 @@ class TaskProgressOverlay(private val context: Context) {
         applyMode()
     }
 
+    /** Cut button: Mayra leaves the foreground completely and waits in standby (same as "go to background"). */
+    private fun closeAndGoToBackground() {
+        closeBar()
+        try {
+            context.startService(
+                Intent(context, StonicXConversationService::class.java)
+                    .setAction(StonicXConversationService.ACTION_ENTER_STANDBY)
+            )
+        } catch (_: Exception) {
+        }
+    }
+
     private fun launchApp(action: String) {
         try {
             context.startActivity(
@@ -414,6 +491,7 @@ class TaskProgressOverlay(private val context: Context) {
     fun setLevel(level: Float) {
         rimGlow.setLevel(level)
         barGlow.setLevel(level)
+        edgeGlow.setLevel(level)
         if (!pageReady || !attached) return
         val now = SystemClock.uptimeMillis()
         if (now - lastLevelPush < 50L) return
@@ -457,6 +535,7 @@ class TaskProgressOverlay(private val context: Context) {
         val palette = orbPalette(mode)
         rimGlow.setPalette(palette)
         barGlow.setPalette(palette)
+        edgeGlow.setPalette(palette)
         if (!pageReady) return
         val hex = ORB_HEX[mode]
         runJs(

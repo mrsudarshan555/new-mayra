@@ -46,8 +46,8 @@ $env:STONICX_RELEASE_STORE_PASSWORD = '<local secret>'
 $env:STONICX_RELEASE_KEY_ALIAS = 'stonicx-release'
 $env:STONICX_RELEASE_KEY_PASSWORD = '<local secret>'
 $env:STONICX_RELEASE_CERT_SHA256 = '<64 hex characters from keytool -list -v>'
-$env:STONICX_DEVELOPER_NAME = 'StonicX'
-$env:STONICX_COPYRIGHT_OWNER = 'StonicX'
+$env:STONICX_DEVELOPER_NAME = 'Zafer'
+$env:STONICX_COPYRIGHT_OWNER = 'Sudarshan'
 .\gradlew.bat :app:assembleRelease
 ```
 

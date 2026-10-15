@@ -28,7 +28,8 @@ object SubAgent {
         user: String,
         temperature: Double = 0.2,
         model: String = app.preferences.subAgentModel,
-        googleSearch: Boolean = false
+        googleSearch: Boolean = false,
+        imagesJpeg: List<ByteArray> = emptyList()
     ): Answer = withContext(Dispatchers.IO) {
         val key = app.preferences.apiKey
         if (key.isBlank()) return@withContext Answer(null, "Gemini API key set nahi hai.")
@@ -37,7 +38,12 @@ object SubAgent {
                 put("systemInstruction", JSONObject().put("parts", JSONArray().put(JSONObject().put("text", system))))
                 put("contents", JSONArray().put(JSONObject().apply {
                     put("role", "user")
-                    put("parts", JSONArray().put(JSONObject().put("text", user)))
+                    val parts = JSONArray().put(JSONObject().put("text", user))
+                    imagesJpeg.forEach { img ->
+                        parts.put(JSONObject().put("inlineData", JSONObject().put("mimeType", "image/jpeg")
+                            .put("data", android.util.Base64.encodeToString(img, android.util.Base64.NO_WRAP))))
+                    }
+                    put("parts", parts)
                 }))
                 put("generationConfig", JSONObject().put("temperature", temperature))
                 if (googleSearch) put("tools", JSONArray().put(JSONObject().put("google_search", JSONObject())))
